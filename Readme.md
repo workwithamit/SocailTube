@@ -9,3 +9,19 @@
 ### we can declare a function connectDB and call it , another method is using iife
 
 ### iife ;(async ()=>{})() , good practice to use semicolon before using iife for better code readability
+
+### aggregation pipeline in mongoDB (very interesting topic in mongoDB)
+
+### there are different types of middlewares like pre post etc...
+
+### you can code them for like delete ho toh ye krdo, ye ho toh kuchh krdo and all
+
+### bcrypt = helps you hash your password
+
+### JWT = JSON WEB TOKEN
+
+### direct encryption krna possible h nahi, toh hum kya krenge, so we will take help of hooks(middleware) in mongoose like pre hook
+
+### pre middleware: functions are executed one after another, when each middleware calls next.
+
+# jwt is a bearer token (kindaa chabi)
