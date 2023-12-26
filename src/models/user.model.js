@@ -1,7 +1,7 @@
 import mongoose, {Schema} from "mongoose";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-
+//chlne lg gya
 const userSchema = new Schema({
     username:{
         type:String,
