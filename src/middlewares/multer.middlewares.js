@@ -1,5 +1,5 @@
 //multer: package used for file uploading
-
+//middleware is like "jate jate mere se milke jana"
 //uploading file using multer and cloudinary includes two steps
 //1. upload it to local server
 //2. then upload it to cloudinary and unlink from local server
