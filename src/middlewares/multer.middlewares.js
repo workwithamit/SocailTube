@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
     destination: function(req,file,cb){
         cb(null,"./public/temp")
     },
+    //we can add uniqueSuffix at the end of filename(better practice)
     filename:function(req,file,cb){
         cb(null,filename.originalname)
     }
