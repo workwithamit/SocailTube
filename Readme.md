@@ -25,3 +25,7 @@
 ### pre middleware: functions are executed one after another, when each middleware calls next.
 
 # jwt is a bearer token (kindaa chabi)
+
+# ?. --> optional chaining operator, it is used to avoid errors that may occur when trying to access the properties or methods of nested objects or arrays when one or more intermediate properties or element might be 'undefined' or 'null' values
+
+# if req.files is defined but 'avatar' is 'null' or 'undefined', it will also return 'undefined' without throwing an error

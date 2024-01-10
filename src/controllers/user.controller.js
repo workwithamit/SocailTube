@@ -43,6 +43,7 @@ const registerUser = asyncHandler(async(req,res)=>{
 
     //console.log(req.files)
 
+    
     const avatarLocalPath = req.files?.avatar[0]?.path;
     //const coverImageLocalPath = req.files?.coverImage[0].path;
 
@@ -80,13 +81,19 @@ const registerUser = asyncHandler(async(req,res)=>{
     if(!createdUser){
         throw new ApiError(500,"Something went wrong while registering the user")
     }
-
+    //chainable methods of res object (http response object)
     return res.status(201).json(
         new ApiResponse(200,createdUser,"User registered successfully")
     )
 
 
+})
 
-
-
+const loginUser = asyncHandler(async(req,res)=>{
+    // req.body --> data
+    // username or email
+    // find the user
+    // password check
+    // access and refresh token
+    // send cookie
 })
