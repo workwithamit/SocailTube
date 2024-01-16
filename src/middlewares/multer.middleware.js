@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     },
     //we can add uniqueSuffix at the end of filename(better practice)
     filename:function(req,file,cb){
-        cb(null,filename.originalname)
+        cb(null,file.originalname)
     }
 })
 

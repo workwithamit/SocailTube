@@ -134,7 +134,7 @@ const loginUser = asyncHandler(async(req,res)=>{
         throw new ApiError(400,"user does not exists")
     }
 
-    const isPasswordValid = await isPasswordCorrect(user.password)
+    const isPasswordValid = await isPasswordCorrect(password)
 
     if(!isPasswordValid){
         throw new ApiError(400,"Invalid user credentials")
@@ -188,4 +188,4 @@ const logOutUser = asyncHandler( async(req,res) => {
 
 
 
-export {registerUser}
+export {registerUser,loginUser}
