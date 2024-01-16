@@ -2,9 +2,28 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js";
 import {ApiResponse} from "../utils/ApiResponse.js";
 import {uploadOnCloudinary} from "../utils/cloudinary.js";
-import mongoose from "mongoose"
-import {User, user} from "../models/user.model.js"
-import { create } from "domain";
+
+import {User} from "../models/user.model.js"
+
+const generateAccessAndRefreshToken = async ( userId ) => {
+    try {
+        const user = User.findById(userId)
+        const accessToken = User.generateAccessToken()
+        const refreshToken = User.generateRefreshToken()
+
+        user.refreshToken = refreshToken
+        //refreshToken toh le liya but db mai save nahi kiya
+        // user.save() --> ye jb call krte h tb mongoose k models kick in ho jate fir sare fields jo required h wo hone hi chahiy, but hume toh ek hi field save krna h
+
+        user.save( { validateBeforeSave : false } )
+
+        return { accessToken,refreshToken }
+        
+    } catch (error) {
+        throw new ApiError(500,"something went wrong while generating access and refresh token ")
+    }
+}
+
 
 //async handler will essentially handle the error caused by any function
 //else we have to write try catch everytime which causes redundancy
@@ -95,5 +114,78 @@ const loginUser = asyncHandler(async(req,res)=>{
     // find the user
     // password check
     // access and refresh token
-    // send cookie
+    // send cookie(cookies are accessed two way both in req and res)
+    const {email,username,password} = req.body
+    console.log(email)
+
+    if(!username && !email){
+        throw new ApiError(400, "username or email is required")
+    }
+
+    //if(!(username || email)){
+       // throw new ApiError(400,"username or email is required")
+    //}
+
+    const user = await User.findOne({
+        $or:[{username},{email}]
+    })
+
+    if(!user){
+        throw new ApiError(400,"user does not exists")
+    }
+
+    const isPasswordValid = await isPasswordCorrect(user.password)
+
+    if(!isPasswordValid){
+        throw new ApiError(400,"Invalid user credentials")
+    }
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+
+    // now, jo upr user variable h (` const user = await User.findOne() `) isme kuchh unwanted fields ka access h like password and refreshToken ki value bhi empty toh ab hum ya toh user.password ko undefined krde and refreshtoken ki value add krde iss variable mai for further works for sending information in cookies
+
+    // ab aapko ye decide krna pdega ki db mai query marna jyada expensive toh nahi h?
+
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
+    // ab hume bhejhni h cookies, cookies jab bhi hum bhejhte h toh hume kuch options design krne pdte h, options kuchh nahi hote h ye ek object hota h bss
+
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    //options se hota kya h ki, aapki cookies jo hoti h unko koi bhi frontend pr modify kr skta h, so using options we can put security like httpOnly allows modification of cookies from the server end only
+
+    return res
+    .status(200)
+    .cookie("accessToken",accessToken,options)
+    .cookie("refreshToken",refreshToken,options)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                user: loggedInUser,accessToken,refreshToken
+            },
+            "User logged in Successfully"
+        )
+    )
+
+    // ab aapke dimag mai ek sawal aa rha hoga ki jb hum cookie mai already accessToken and refreshToken bhejh rhe h toh ye .json mai firse kyu bhejh rhe
+
+    // so basically, ye khrab practice h ya achhi h it depends, user agr localStorage mai save krna chahta ho accessToken and refreshToken ya fir mobile user ho toh bhejhna achhi practice h
+
 })
+
+const logOutUser = asyncHandler( async(req,res) => {
+    // jb bhi mai user ko logout kr rha hu, toh aapke dimag mai strategy aani chahiy
+
+    //we have to delete the cookies and the refreshToken in db
+})
+
+
+
+
+
+export {registerUser}

@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
+
 const app = express()
 
 app.use(cors({
@@ -35,6 +36,16 @@ app.use(cookieParser())
 // it decodes the cookie information and creates a 'cookies' object containing 
 // key-value pair of parsed cookies
 
+//import routes
+import userRouter from "./routes/user.route.js"
+
+//so basically when we write all the code of routes in app.js itself then we can use     
+//app.get() but when we have modularized things then we have use the routers like middleware
+//so we have use app.use(route ka nam, routeFile ka nam )
+
+app.use("/api/v1/users",userRouter)
+
+// http://localhost:8000/users
 
 
 
