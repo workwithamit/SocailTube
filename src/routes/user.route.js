@@ -1,9 +1,17 @@
 import {Router} from "express";
-import {loginUser, registerUser} from "../controllers/user.controller.js"
+import {logOutUser, loginUser, registerUser} from "../controllers/user.controller.js"
 import {upload} from "../middlewares/multer.middleware.js"
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
+
+
 //router.route("/home").post(middleware,methodThatShouldBeExecuted)
+
+// that's why we use next() in code of middleware for telling the route that it's work is done now execute other functions
+
+// we can add as many middleware as we want, just we have to add "next()" for removing the confusion of router
+
 router.route("/register").post(
     upload.fields([
         {
@@ -19,5 +27,9 @@ router.route("/register").post(
 )
 
 router.route("/login").post(loginUser)
+
+// Secured routes
+
+router.route("/logout").post(verifyJWT,logOutUser)
 
 export default router

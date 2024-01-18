@@ -181,11 +181,43 @@ const loginUser = asyncHandler(async(req,res)=>{
 const logOutUser = asyncHandler( async(req,res) => {
     // jb bhi mai user ko logout kr rha hu, toh aapke dimag mai strategy aani chahiy
 
-    //we have to delete the cookies and the refreshToken in db
+    //we have to delete the cookies  and the refreshToken in db
+
+    // now I need the access of user but we don't have any way of getting it directly so using auth.middleware we get the access of user in req object
+
+    // using user we can get _id and using that we can access the whole user object from the User db and delete the refreshToken
+
+    // so now we will access the user object using findById, but there is a catch, now we have to delete the refreshToken and save it to the db
+    // then we have to save using "save({validateBefore : false})"
+
+    // there is a better way or another method that we can use
+
+    await User.findByIdAndUpdate(req.user._id,
+        {
+            $set:{
+                refreshToken: undefined
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    const options = {
+        httpOnly:true,
+        secure:true
+    }
+
+
+    return res
+    .status(200)
+    .clearCookie("accessToken",options)
+    .clearCookie("refreshToken",options)
+    .json(new ApiResponse(200,{},"User logged Out"))
 })
 
 
 
 
 
-export {registerUser,loginUser}
+export {registerUser,loginUser,logOutUser}
