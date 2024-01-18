@@ -1,4 +1,4 @@
-// ye verify krwayega ki user h ya nahi h 
+// ye verify krwayega ki user (loggedIn) h ya nahi h 
 
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -21,6 +21,10 @@ export const verifyJWT = asyncHandler(async(req, _, next)=>{
     // aapne hi toh diya ye middleware use krke cookieParser
 
     //req.header() --> ye mobile app se aata h isme hum "Authorization nam pass krte h jisme bearer <token_name> ka access hota h"
+
+    // Authorization wala header postman mai bhi hota h
+
+    // JWT mai abhi authorization: bearer <token_name>
 
     try {
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
