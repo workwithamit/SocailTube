@@ -13,6 +13,7 @@ const router = Router();
 // we can add as many middleware as we want, just we have to add "next()" for removing the confusion of router
 
 router.route("/register").post(
+    //upload.field or fields ---> depends whether we are taking single file or multiple files
     upload.fields([
         {
             name:"avatar",

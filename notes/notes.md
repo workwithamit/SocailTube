@@ -29,3 +29,12 @@
 # ?. --> optional chaining operator, it is used to avoid errors that may occur when trying to access the properties or methods of nested objects or arrays when one or more intermediate properties or element might be 'undefined' or 'null' values
 
 # if req.files is defined but 'avatar' is 'null' or 'undefined', it will also return 'undefined' without throwing an error
+
+// pipeline kya hoti h wo likhiye
+// match
+// lookup
+// addfields
+// cond
+// in
+// size
+// project
